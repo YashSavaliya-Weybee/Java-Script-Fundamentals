@@ -74,6 +74,19 @@ nav {
   cursor: pointer;
   transition: all 0.3s;
 }
+.logout__btn{
+  display: none;
+  border: none;
+  font-size: 2.2rem;
+  background: white;
+  padding: 10px;
+  border-radius: 20px;
+}
+.logout__btn:hover{
+  background-image: linear-gradient(to top left, #e52a5a, #ff585f);
+  color: white;
+  cursor: pointer;
+}
 
 .login__btn:hover,
 .login__btn:focus,
