@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"
+        integrity="sha512-KfkfwYDsLkIlwQp6LFnl8zNdLGxu9YAA1QvwINks4PhcElQSvqcyVLLD9aMhXd13uQjoXtEKNosOWaZqXgel0g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="main.css">
+
+    <title>Document</title>
+</head>
+
+<body>
+    <main>
+        <div class="container">
+            <div class="header">
+                <h1>TO DO LIST</h1>
+            </div>
+            <div class="action-area">
+                <div class="addSearch">
+                    <input class="inputText" type="text" placeholder="Enter String">
+                    <button class="addbtn "><i class="fa-solid fa-plus"></i></button>
+                    <button class="searchbtn"><i class="fa fa-search"></i></button>
+                </div>
+                <div class="action-buttons">
+                    <div class="selectList">
+                        <select id="actionDDL" onchange="getSelectedValue()">
+                            <option>Action</option>
+                            <option value="Delete All Selected">Delete All Completed</option>
+                            <option value="Select All">Completed All</option>
+                            <option value="Deselect All">Uncomplete All</option>
+                        </select>
+                        <select id="sortDDL" onchange="getSortedValue()">
+                            <option>Sort</option>
+                            <option value="A-Z">A-Z</option>
+                            <option value="Z-A">Z-A</option>
+                            <option value="Newest">Newest</option>
+                            <option value="Oldest">Oldest</option>
+                        </select>
+                    </div>
+                    <div class="btnList">
+                        <button id="selectAll" onclick="selectEntries(this)">All</button>
+                        <button id="selectActive" onclick="selectEntries(this)">Active</button>
+                        <button id="selectCompleted" onclick="selectEntries(this)">Completed</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="list-area">
+                <ul class="list">
+
+                </ul>
+            </div>
+        </div>
+    </main>
+</body>
+<script src="script.js"></script>
+
+</html>
