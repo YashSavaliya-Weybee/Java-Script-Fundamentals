@@ -234,9 +234,10 @@ function selectEntries(el) {
 function getSelectedValue() {
     switch (actionDDL.value) {
         case 'Delete All Selected':
-            for (let [i, el] of allTask.entries()) {
-                if (el.isCheck) {
+            for (let i = 0; i < allTask.length; i++) {
+                if (allTask[i].isCheck) {
                     allTask.splice(i, 1);
+                    i--;
                 }
             }
             displayByCondition();
