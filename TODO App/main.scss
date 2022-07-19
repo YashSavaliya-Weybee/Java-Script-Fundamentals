@@ -1,8 +1,10 @@
 body {
     background-image: url(images/background1.jpg);
     background-repeat: no-repeat;
-    background-size: cover;
-    font-family: Arial, Helvetica, sans-serif;
+    background-size: auto;
+    margin: 0;
+    height: 95vh;
+    background-position: abs($number: 0);
 }
 
 ::-webkit-scrollbar {
@@ -56,6 +58,42 @@ main {
 
 .container {
     padding: 20px;
+}
+
+.mobile-action-menu {
+    display: none;
+}
+
+.inputBox {
+    width: 60%;
+    height: 25px;
+    font-size: 15px;
+    box-shadow: 0 5px 10px hsl(0deg 33% 98% / 44%);
+    outline: none;
+    border: none;
+    border-radius: 5px;
+}
+
+.active,
+.search {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 10px hsl(0deg 33% 98% / 44%);
+    cursor: pointer;
+}
+
+strong {
+    color: white;
+    font-size: 18px;
+}
+
+.no-data {
+    text-align: center;
+    display: block;
+    padding: 10px;
+    font-size: 20px;
+    color: white;
+    background-color: rgba(8, 8, 8, 0.7);
+    border-radius: 9px;
 }
 
 .action-area {
@@ -113,7 +151,7 @@ main {
         justify-content: center;
 
         .selectList {
-            width: 48%;
+            width: 60%;
 
             select {
                 border: none;
@@ -121,7 +159,7 @@ main {
                 font-size: 16px;
                 font-weight: 600;
                 height: 40px;
-                width: 40%;
+                width: 30%;
                 padding: 5px;
                 margin: 10px;
                 color: #b7004b;
@@ -137,14 +175,14 @@ main {
         }
 
         .btnList {
-            width: 52%;
+            width: 40%;
 
             button {
                 border: none;
                 border-radius: 5px;
                 color: #b7004b;
                 height: 40px;
-                width: 21%;
+                width: 28%;
                 padding: 5px;
                 margin: 10px 1px;
                 transition-duration: 0.5s;
@@ -226,20 +264,7 @@ main {
     }
 }
 
-.inputBox {
-    width: 60%;
-    height: 25px;
-    font-size: 15px;
-    box-shadow: 0 5px 10px hsl(0deg 33% 98% / 44%);
-    outline: none;
-    border: none;
-    border-radius: 5px;
-}
 
-.active {
-    box-shadow: 0 5px 10px hsl(0deg 33% 98% / 44%);
-    cursor: pointer;
-}
 
 @media only screen and (max-width: 1300px) {
     .header {
@@ -256,16 +281,16 @@ main {
 
         .action-buttons {
             .selectList {
-                width: 48%;
+                width: 60%;
 
                 select {
-                    width: 35%;
+                    width: 29%;
                 }
             }
 
 
             .btnList {
-                width: 52%;
+                width: 40%;
 
                 button {
                     width: 30%;
@@ -299,18 +324,20 @@ main {
     }
 
     .action-area {
+        width: 95%;
+
         .action-buttons {
             .selectList {
-                width: 48%;
+                width: 60%;
 
                 select {
-                    width: 35%;
+                    width: 24%;
                 }
             }
 
 
             .btnList {
-                width: 52%;
+                width: 40%;
 
                 button {
                     width: 31%;
@@ -405,6 +432,7 @@ main {
 }
 
 @media only screen and (max-width: 600px) {
+
     .header {
         font-size: 15px;
         width: 73%;
@@ -415,7 +443,7 @@ main {
     }
 
     .action-area {
-        height: 420px;
+        height: 180px;
     }
 
     .action-area .addSearch {
@@ -432,19 +460,89 @@ main {
     }
 
     .action-area .action-buttons {
-        display: block;
+        display: none;
+    }
 
-        select {
-            margin-left: 10px;
+    .height {
+        height: 420px;
+    }
+
+    .mobile-action-menu {
+        display: block;
+        padding: 10px;
+
+        .open-close-menu {
+            width: 100%;
+            background-color: white;
+            border-radius: 5px;
         }
     }
 
-    .action-area .action-buttons .btnList,
-    .action-area .action-buttons .selectList {
-        padding: 0px;
-        width: 100%;
-        display: flex;
-        justify-content: center;
+    .menu-list-exit-layer {
+        display: none;
+    }
+
+    .mobile-menu,
+    .mobile-menu-exit {
+        cursor: pointer;
+        padding: 5px 20px;
+        border-radius: 5px;
+        height: 25px;
+    }
+
+    nav {
+        display: none;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .menu-btn {
+        display: block;
+    }
+
+    nav {
+        margin: auto;
+        margin-top: 10px;
+        z-index: 999;
+        width: 70%;
+        background: #20272E;
+        height: 25vh;
+        padding: 1em;
+        border-radius: 20px;
+
+        div {
+            display: block;
+            padding: .3em;
+
+            select {
+                width: 100%;
+                height: 30px;
+                padding: 5px;
+                font-weight: bold;
+                color: #b7004b;
+                border-radius: 6px;
+            }
+
+            button {
+                border: none;
+                width: 89%;
+                height: 30px;
+                padding: 5px;
+                font-weight: bold;
+                color: #b7004b;
+                border-radius: 6px;
+            }
+        }
+
+        .nav-list {
+            margin: 5px;
+        }
+    }
+
+    .mobile-action-menu {
+        display: block;
     }
 
     .list-area {

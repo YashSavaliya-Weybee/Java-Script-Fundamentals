@@ -6,6 +6,8 @@ const addButton = document.querySelector('.addbtn');
 const searchButton = document.querySelector('.searchbtn');
 const actionDDL = document.getElementById('actionDDL');
 const sortDDL = document.getElementById('sortDDL');
+const actionDDLMobile = document.getElementById('actionDDLMobile');
+const sortDDLMobile = document.getElementById('sortDDLMobile');
 const displayAllButton = document.querySelector('#selectAll');
 const displayActiveButton = document.querySelector('#selectActive');
 const displayCompletedButton = document.querySelector('#selectCompleted');
@@ -14,37 +16,43 @@ displayAllButton.classList.add('active');
 let inc = 0;
 let allTask = []
 
-function displayEntries(arr) {
-    listItem.textContent = "";
-    for (let el of arr) {
-        const task = `<li>
-                         <input id='${el.id}' onclick="checkEl(this)" class="chkBox" type="checkbox">
-                         <span ondblclick="editElement(this.parentElement)">${el.value}</span>
-                         <a onclick="editElement(this.parentElement)" href="#"><i class="fa-solid fa-pen-to-square"></i></a>
-                         <a onclick="deleteEl(this.parentElement)" href="#"><i class="fa-solid fa-delete-left"></i></a>
-                      </li>`;
-        listItem.insertAdjacentHTML('afterbegin', task);
-        if (el.isCheck) {
-            document.getElementById(`${el.id}`).checked = true;
-        }
-    }
+function displayLi(el) {
+    const task = `<li>
+                    <input id='${el.id}' onclick="checkEl(this)" class="chkBox" type="checkbox">
+                    <span ondblclick="editElement(this.parentElement)">${el.value}</span>
+                    <a onclick="editElement(this.parentElement)" href="#"><i class="fa-solid fa-pen-to-square"></i></a>
+                    <a onclick="deleteEl(this.parentElement)" href="#"><i class="fa-solid fa-delete-left"></i></a>
+                  </li>`;
+    listItem.insertAdjacentHTML('afterbegin', task);
 }
 
 function addElement() {
     const text = inputText.value;
-    if (text) {
-        allTask.push({
-            id: inc,
-            value: text.toLowerCase(),
-            isCheck: false
-        });
-        inc++;
-        inputText.value = "";
-        inputText.focus();
-        displayByCondition();
-        displayAllButton.classList.add('active');
-        displayActiveButton.classList.remove('active');
-        displayCompletedButton.classList.remove('active');
+    if (text != '') {
+        let flag = false;
+        for (let i of allTask) {
+            if (i.value == text) {
+                flag = true;
+            }
+        }
+        if (flag) {
+            alert(`${text} task already exists!`)
+        } else {
+            allTask.push({
+                id: inc,
+                value: text.toLowerCase(),
+                isCheck: false
+            });
+            inc++;
+            inputText.value = "";
+            inputText.focus();
+            displayByCondition(allTask);
+            displayAllButton.classList.add('active');
+            displayActiveButton.classList.remove('active');
+            displayCompletedButton.classList.remove('active');
+        }
+    } else {
+        alert("Enter task to add!");
     }
 }
 
@@ -52,40 +60,34 @@ addButton.addEventListener('click', function () {
     addElement();
 })
 
-inputText.addEventListener('keydown', function (e) {
+inputText.addEventListener('keyup', function (e) {
     if (e.key == 'Enter') {
         addElement();
+    } else {
+        if (searchButton.classList.contains('search')) {
+            searchEl();
+        }
     }
 })
 
-searchButton.addEventListener('click', function () {
-    let found = false;
-    const text = inputText.value;
-
-    if (text) {
-        listItem.textContent = "";
-        for (let el of allTask) {
-            let x = el.value.search(text);
-            if (x >= 0) {
-                found = true;
-                const task = `<li>
-                                <input id='${el.id}' onclick="checkEl(this)" class = "chkBox" type="checkbox">
-                                <span ondblclick="editElement(this.parentElement)">${el.value}</span>
-                                <a onclick="editElement(this.parentElement)" href="#"><i class="fa-solid fa-pen-to-square"></i></a>
-                                <a onclick="deleteEl(this.parentElement)" href="#"><i class="fa-solid fa-delete-left"></i></a>
-                              </li>`;
-                listItem.insertAdjacentHTML('afterbegin', task);
-            }
+function searchEl() {
+    const txt = inputText.value;
+    listItem.textContent = "";
+    for (let el of allTask) {
+        let x = el.value.search(txt);
+        if (x >= 0) {
+            displayLi(el);
         }
-        if (!found) {
-            alert(`${text} is not found!`);
-            displayEntries(allTask);
-            inputText.value = "";
-        }
-    } else {
-        alert("Enter task to search!")
     }
-
+}
+searchButton.addEventListener('click', function () {
+    searchButton.classList.toggle('search');
+    if (!searchButton.classList.contains('search')) {
+        displayByCondition(allTask);
+    } else {
+        searchEl()
+    }
+    inputText.focus();
 })
 
 function editElement(el) {
@@ -110,7 +112,7 @@ function editElement(el) {
                     break;
                 }
             }
-            displayByCondition();
+            displayByCondition(allTask);
         }
     })
 
@@ -125,7 +127,7 @@ function editElement(el) {
                         break;
                     }
                 }
-                displayByCondition();
+                displayByCondition(allTask);
             }
         }
     })
@@ -139,7 +141,7 @@ function deleteEl(el) {
             allTask.splice(i, 1);
         }
     }
-    displayByCondition();
+    displayByCondition(allTask);
 }
 
 function checkEl(el) {
@@ -157,54 +159,33 @@ function checkEl(el) {
             }
         }
     }
-    displayByCondition();
+    displayByCondition(allTask);
 }
 
-function displayByCondition() {
+function displayByCondition(arr) {
     if (displayAllButton.classList.contains('active')) {
         listItem.textContent = "";
-        for (let el of allTask) {
-            const task = `<li>
-                            <input id='${el.id}' onclick="checkEl(this)" class="chkBox" type="checkbox">
-                            <span ondblclick="editElement(this.parentElement)">${el.value}</span>
-                            <a onclick="editElement(this.parentElement)" href="#"><i class="fa-solid fa-pen-to-square"></i></a>
-                            <a onclick="deleteEl(this.parentElement)" href="#"><i class="fa-solid fa-delete-left"></i></a>
-                          </li>`;
-            listItem.insertAdjacentHTML('afterbegin', task);
+        for (let el of arr) {
+            displayLi(el);
             if (el.isCheck) {
                 document.getElementById(`${el.id}`).checked = true;
             }
         }
-        getSortedValue();
     } else if (displayActiveButton.classList.contains('active')) {
         listItem.textContent = "";
-        for (let el of allTask) {
+        for (let el of arr) {
             if (!el.isCheck) {
-                const task = `<li>
-                                <input id='${el.id}' onclick="checkEl(this)" class="chkBox" type="checkbox">
-                                <span ondblclick="editElement(this.parentElement)">${el.value}</span>
-                                <a onclick="editElement(this.parentElement)" href="#"><i class="fa-solid fa-pen-to-square"></i></a>
-                                <a onclick="deleteEl(this.parentElement)" href="#"><i class="fa-solid fa-delete-left"></i></a>
-                              </li>`;
-                listItem.insertAdjacentHTML('afterbegin', task);
+                displayLi(el);
             }
         }
-        getSortedValue();
     } else if (displayCompletedButton.classList.contains('active')) {
         listItem.textContent = "";
-        for (let el of allTask) {
+        for (let el of arr) {
             if (el.isCheck) {
-                const task = `<li>
-                                <input id='${el.id}' onclick="checkEl(this)" class="chkBox" type="checkbox">
-                                <span ondblclick="editElement(this.parentElement)">${el.value}</span>
-                                <a onclick="editElement(this.parentElement)" href="#"><i class="fa-solid fa-pen-to-square"></i></a>
-                                <a onclick="deleteEl(this.parentElement)" href="#"><i class="fa-solid fa-delete-left"></i></a>
-                              </li>`;
-                listItem.insertAdjacentHTML('afterbegin', task);
+                displayLi(el);
                 document.getElementById(`${el.id}`).checked = true;
             }
         }
-        getSortedValue();
     }
 }
 
@@ -214,25 +195,36 @@ function selectEntries(el) {
             displayAllButton.classList.add('active');
             displayActiveButton.classList.remove('active');
             displayCompletedButton.classList.remove('active');
-            displayByCondition()
+            displayByCondition(allTask)
+            getSortedValue();
             break;
         case 'selectActive':
             displayAllButton.classList.remove('active');
             displayActiveButton.classList.add('active');
             displayCompletedButton.classList.remove('active');
-            displayByCondition()
+            displayByCondition(allTask)
+            getSortedValue();
             break
         case 'selectCompleted':
             displayAllButton.classList.remove('active');
             displayActiveButton.classList.remove('active');
             displayCompletedButton.classList.add('active');
-            displayByCondition()
+            displayByCondition(allTask)
+            getSortedValue();
             break
     }
 }
 
 function getSelectedValue() {
-    switch (actionDDL.value) {
+    selectAction(actionDDL)
+}
+
+function getSelectedValueMobile() {
+    selectAction(actionDDLMobile)
+}
+
+function selectAction(el) {
+    switch (el.value) {
         case 'Delete All Selected':
             for (let i = 0; i < allTask.length; i++) {
                 if (allTask[i].isCheck) {
@@ -240,40 +232,40 @@ function getSelectedValue() {
                     i--;
                 }
             }
-            displayByCondition();
+            displayByCondition(allTask);
             break;
 
         case 'Select All':
             for (let val of allTask) {
                 val.isCheck = true;
             }
-            displayByCondition();
+            displayByCondition(allTask);
             break;
 
         case 'Deselect All':
             for (let val of allTask) {
                 val.isCheck = false;
             }
-            displayByCondition();
+            displayByCondition(allTask);
             break;
     }
 }
 
-function sorting() {
+function sortArr() {
     if (displayAllButton.classList.contains('active')) {
         return allTask;
     } else if (displayActiveButton.classList.contains('active')) {
         let activeTask = [];
         for (let el of allTask) {
             if (!el.isCheck) {
-                activeTask.push(el)
+                activeTask.push(el);
             }
         }
         return activeTask;
     } else if (displayCompletedButton.classList.contains('active')) {
         let completeTask = [];
         for (let el of allTask) {
-            if (!el.isCheck) {
+            if (el.isCheck) {
                 completeTask.push(el);
             }
         }
@@ -282,23 +274,33 @@ function sorting() {
 }
 
 function getSortedValue() {
-    switch (sortDDL.value) {
+    selectSort(sortDDL)
+}
+
+function getSortedValueMobile() {
+    selectSort(sortDDLMobile)
+}
+
+function selectSort(device) {
+    switch (device.value) {
         case 'A-Z':
-            let sorted = sorting().sort((a, b) => (a.value < b.value) ? 1 : ((b.value < a.value) ? -1 : 0));
-            displayEntries(sorted);
+            let sorted = sortArr().sort((a, b) => (a.value < b.value) ? 1 : ((b.value < a.value) ? -1 : 0));
+            displayByCondition(sorted);
             break;
 
         case 'Z-A':
-            let sorted1 = sorting().sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
-            displayEntries(sorted1);
+            let sorted1 = sortArr().sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
+            displayByCondition(sorted1);
             break;
 
         case 'Newest':
-            displayEntries(sorting());
+            displayByCondition(allTask);
             break;
 
         case 'Oldest':
-            displayEntries(sorting().reverse());
+            let dupliArr = [...allTask]
+            displayByCondition(dupliArr.reverse())
             break;
     }
 }
+

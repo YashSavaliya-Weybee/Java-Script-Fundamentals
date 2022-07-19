@@ -1,8 +1,10 @@
 body {
   background-image: url(images/background1.jpg);
   background-repeat: no-repeat;
-  background-size: cover;
-  font-family: Arial, Helvetica, sans-serif;
+  background-size: auto;
+  margin: 0;
+  height: 95vh;
+  background-position: 0;
 }
 
 ::-webkit-scrollbar {
@@ -55,6 +57,42 @@ main {
   padding: 20px;
 }
 
+.mobile-action-menu {
+  display: none;
+}
+
+.inputBox {
+  width: 60%;
+  height: 25px;
+  font-size: 15px;
+  box-shadow: 0 5px 10px hsla(0deg, 33%, 98%, 0.44);
+  outline: none;
+  border: none;
+  border-radius: 5px;
+}
+
+.active,
+.search {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 10px hsla(0deg, 33%, 98%, 0.44);
+  cursor: pointer;
+}
+
+strong {
+  color: white;
+  font-size: 18px;
+}
+
+.no-data {
+  text-align: center;
+  display: block;
+  padding: 10px;
+  font-size: 20px;
+  color: white;
+  background-color: rgba(8, 8, 8, 0.7);
+  border-radius: 9px;
+}
+
 .action-area {
   width: 65%;
   display: block;
@@ -103,7 +141,7 @@ main {
   justify-content: center;
 }
 .action-area .action-buttons .selectList {
-  width: 48%;
+  width: 60%;
 }
 .action-area .action-buttons .selectList select {
   border: none;
@@ -111,7 +149,7 @@ main {
   font-size: 16px;
   font-weight: 600;
   height: 40px;
-  width: 40%;
+  width: 30%;
   padding: 5px;
   margin: 10px;
   color: #b7004b;
@@ -124,14 +162,14 @@ main {
   cursor: pointer;
 }
 .action-area .action-buttons .btnList {
-  width: 52%;
+  width: 40%;
 }
 .action-area .action-buttons .btnList button {
   border: none;
   border-radius: 5px;
   color: #b7004b;
   height: 40px;
-  width: 21%;
+  width: 28%;
   padding: 5px;
   margin: 10px 1px;
   transition-duration: 0.5s;
@@ -199,21 +237,6 @@ main {
   box-shadow: 0 5px 10px hsla(0deg, 33%, 98%, 0.44);
 }
 
-.inputBox {
-  width: 60%;
-  height: 25px;
-  font-size: 15px;
-  box-shadow: 0 5px 10px hsla(0deg, 33%, 98%, 0.44);
-  outline: none;
-  border: none;
-  border-radius: 5px;
-}
-
-.active {
-  box-shadow: 0 5px 10px hsla(0deg, 33%, 98%, 0.44);
-  cursor: pointer;
-}
-
 @media only screen and (max-width: 1300px) {
   .header {
     font-size: 20px;
@@ -226,13 +249,13 @@ main {
     width: 80%;
   }
   .action-area .action-buttons .selectList {
-    width: 48%;
+    width: 60%;
   }
   .action-area .action-buttons .selectList select {
-    width: 35%;
+    width: 29%;
   }
   .action-area .action-buttons .btnList {
-    width: 52%;
+    width: 40%;
   }
   .action-area .action-buttons .btnList button {
     width: 30%;
@@ -254,14 +277,17 @@ main {
   .header h1 {
     width: 40%;
   }
+  .action-area {
+    width: 95%;
+  }
   .action-area .action-buttons .selectList {
-    width: 48%;
+    width: 60%;
   }
   .action-area .action-buttons .selectList select {
-    width: 35%;
+    width: 24%;
   }
   .action-area .action-buttons .btnList {
-    width: 52%;
+    width: 40%;
   }
   .action-area .action-buttons .btnList button {
     width: 31%;
@@ -337,7 +363,7 @@ main {
     width: auto;
   }
   .action-area {
-    height: 420px;
+    height: 180px;
   }
   .action-area .addSearch {
     padding: 10px;
@@ -350,17 +376,75 @@ main {
     padding: auto;
   }
   .action-area .action-buttons {
+    display: none;
+  }
+  .height {
+    height: 420px;
+  }
+  .mobile-action-menu {
+    display: block;
+    padding: 10px;
+  }
+  .mobile-action-menu .open-close-menu {
+    width: 100%;
+    background-color: white;
+    border-radius: 5px;
+  }
+  .menu-list-exit-layer {
+    display: none;
+  }
+  .mobile-menu,
+.mobile-menu-exit {
+    cursor: pointer;
+    padding: 5px 20px;
+    border-radius: 5px;
+    height: 25px;
+  }
+  nav {
+    display: none;
+  }
+  .hidden {
+    display: none;
+  }
+  .menu-btn {
     display: block;
   }
-  .action-area .action-buttons select {
-    margin-left: 10px;
+  nav {
+    margin: auto;
+    margin-top: 10px;
+    z-index: 999;
+    width: 70%;
+    background: #20272E;
+    height: 25vh;
+    padding: 1em;
+    border-radius: 20px;
   }
-  .action-area .action-buttons .btnList,
-.action-area .action-buttons .selectList {
-    padding: 0px;
+  nav div {
+    display: block;
+    padding: 0.3em;
+  }
+  nav div select {
     width: 100%;
-    display: flex;
-    justify-content: center;
+    height: 30px;
+    padding: 5px;
+    font-weight: bold;
+    color: #b7004b;
+    border-radius: 6px;
+  }
+  nav div button {
+    border: none;
+    width: 89%;
+    height: 30px;
+    padding: 5px;
+    font-weight: bold;
+    color: #b7004b;
+    border-radius: 6px;
+  }
+  nav .nav-list {
+    margin: 5px;
+  }
+  .mobile-action-menu {
+    display: block;
   }
   .list-area {
     width: 100%;
