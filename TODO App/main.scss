@@ -81,6 +81,25 @@ main {
     cursor: pointer;
 }
 
+.editInput {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 20px;
+    padding: 4px;
+
+    &:focus {
+        box-shadow: 0 5px 10px hsl(0deg 33% 98% / 44%);
+        outline: none;
+    }
+}
+
+.actv {
+    background: white;
+    color: black;
+    border-radius: 5px;
+}
+
 strong {
     color: white;
     font-size: 18px;
@@ -421,6 +440,10 @@ strong {
             span {
                 width: 73%;
                 margin: 0px 5px;
+
+                .editInput {
+                    width: 100%;
+                }
             }
 
             a {

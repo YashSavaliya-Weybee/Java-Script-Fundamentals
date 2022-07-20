@@ -11,15 +11,20 @@ const sortDDLMobile = document.getElementById('sortDDLMobile');
 const displayAllButton = document.querySelector('#selectAll');
 const displayActiveButton = document.querySelector('#selectActive');
 const displayCompletedButton = document.querySelector('#selectCompleted');
+const displayAllButtonMobile = document.querySelector('#selectAllMobile');
+const displayActiveButtonMobile = document.querySelector('#selectActiveMobile');
+const displayCompletedButtonMobile = document.querySelector('#selectCompletedMobile');
 displayAllButton.classList.add('active');
+displayAllButtonMobile.classList.add('active');
 
 let inc = 0;
 let allTask = []
+let oldTask = []
 
 function displayLi(el) {
     const task = `<li>
                     <input id='${el.id}' onclick="checkEl(this)" class="chkBox" type="checkbox">
-                    <span ondblclick="editElement(this.parentElement)">${el.value}</span>
+                    <span ondblclick="editElement(this.parentElement)"><input type="text" class="editInput" value="${el.value}" disabled></span>
                     <a onclick="editElement(this.parentElement)" href="#"><i class="fa-solid fa-pen-to-square"></i></a>
                     <a onclick="deleteEl(this.parentElement)" href="#"><i class="fa-solid fa-delete-left"></i></a>
                   </li>`;
@@ -38,12 +43,14 @@ function addElement() {
         if (flag) {
             alert(`${text} task already exists!`)
         } else {
+            allTask = [...oldTask]
             allTask.push({
                 id: inc,
                 value: text.toLowerCase(),
                 isCheck: false
             });
             inc++;
+            oldTask = [...allTask]
             inputText.value = "";
             inputText.focus();
             displayByCondition(allTask);
@@ -80,6 +87,7 @@ function searchEl() {
         }
     }
 }
+
 searchButton.addEventListener('click', function () {
     searchButton.classList.toggle('search');
     if (!searchButton.classList.contains('search')) {
@@ -90,25 +98,38 @@ searchButton.addEventListener('click', function () {
     inputText.focus();
 })
 
+function disableEditInput(editInputs) {
+    for (let i = 0; i < editInputs.length; i++) {
+        editInputs[i].children[1].children[0].classList.remove('actv');
+        editInputs[i].children[1].children[0].setAttribute("disabled", "true")
+        editInputs[i].children[2].classList.remove('active');
+    }
+}
+
 function editElement(el) {
     const idNo = el.children[0].getAttribute('id');
+    const editInput = el.children[1].children[0];
+    const oldText = el.children[1].children[0].value;
+    const editInputs = document.getElementsByTagName('li');
 
-    let tag = document.createElement("input");
-    tag.setAttribute('type', 'text');
-    tag.className = "inputBox";
+    disableEditInput(editInputs);
+    el.children[2].classList.add('active');
 
-    el.querySelector('span').textContent = "";
-    el.querySelector('span').appendChild(tag).focus();
-    const inputBox = document.querySelector('.inputBox');
-    inputBox.value = allTask[idNo].value;
+    const end = editInput.value.length;
+    editInput.setSelectionRange(end, end);
 
-    inputBox.addEventListener('blur', function () {
-        if (inputBox.value == "") {
-            el.querySelector('span').textContent = allTask[idNo].value;
+    editInput.classList.add('actv');
+    editInput.removeAttribute("disabled");
+    editInput.focus();
+
+    editInput.addEventListener('blur', function () {
+        if (editInput.value == "") {
+            editInput.value = oldText;
+            disableEditInput(editInputs);
         } else {
             for (let i of allTask) {
                 if (i.id == idNo) {
-                    i.value = inputBox.value;
+                    i.value = editInput.value;
                     break;
                 }
             }
@@ -116,14 +137,15 @@ function editElement(el) {
         }
     })
 
-    inputBox.addEventListener('keydown', function (e) {
+    editInput.addEventListener('keydown', function (e) {
         if (e.key == 'Enter') {
-            if (inputBox.value == "") {
-                el.querySelector('span').textContent = allTask[idNo].value;
+            if (editInput.value == "") {
+                editInput.value = oldText;
+                disableEditInput(editInputs);
             } else {
                 for (let i of allTask) {
                     if (i.id == idNo) {
-                        i.value = inputBox.value;
+                        i.value = editInput.value;
                         break;
                     }
                 }
@@ -141,6 +163,11 @@ function deleteEl(el) {
             allTask.splice(i, 1);
         }
     }
+    for (let [i, val] of oldTask.entries()) {
+        if (val.id == idNo) {
+            oldTask.splice(i, 1);
+        }
+    }
     displayByCondition(allTask);
 }
 
@@ -152,8 +179,18 @@ function checkEl(el) {
                 val.isCheck = true;
             }
         }
+        for (let val of oldTask) {
+            if (val.id == idNo) {
+                val.isCheck = true;
+            }
+        }
     } else if (!el.checked) {
-        for (let [i, val] of allTask.entries()) {
+        for (let val of allTask) {
+            if (val.id == idNo) {
+                val.isCheck = false;
+            }
+        }
+        for (let val of oldTask) {
             if (val.id == idNo) {
                 val.isCheck = false;
             }
@@ -186,6 +223,68 @@ function displayByCondition(arr) {
                 document.getElementById(`${el.id}`).checked = true;
             }
         }
+    }
+}
+
+function displayByConditionMobile(arr) {
+    if (displayAllButtonMobile.classList.contains('active')) {
+        console.log('All')
+        listItem.textContent = "";
+        for (let el of arr) {
+            displayLi(el);
+            if (el.isCheck) {
+                document.getElementById(`${el.id}`).checked = true;
+            }
+        }
+    } else if (displayActiveButtonMobile.classList.contains('active')) {
+        console.log("Active")
+        listItem.textContent = "";
+        for (let el of arr) {
+            if (!el.isCheck) {
+                displayLi(el);
+            }
+        }
+    } else if (displayCompletedButtonMobile.classList.contains('active')) {
+
+        listItem.textContent = "";
+        for (let el of arr) {
+            if (el.isCheck) {
+                displayLi(el);
+                document.getElementById(`${el.id}`).checked = true;
+            }
+        }
+    }
+}
+
+function selectEntriesMobile(el) {
+    switch (el.getAttribute('id')) {
+        case 'selectAllMobile':
+            displayAllButtonMobile.classList.add('active');
+            displayActiveButtonMobile.classList.remove('active');
+            displayCompletedButtonMobile.classList.remove('active');
+            displayAllButton.classList.add('active');
+            displayActiveButton.classList.remove('active');
+            displayCompletedButton.classList.remove('active');
+            displayByConditionMobile(allTask)
+            break;
+        case 'selectActiveMobile':
+            displayAllButtonMobile.classList.remove('active');
+            displayActiveButtonMobile.classList.add('active');
+            displayCompletedButtonMobile.classList.remove('active');
+            displayAllButton.classList.remove('active');
+            displayActiveButton.classList.add('active');
+            displayCompletedButton.classList.remove('active');
+            displayByConditionMobile(allTask)
+            break
+        case 'selectCompletedMobile':
+            displayAllButtonMobile.classList.remove('active');
+            displayActiveButtonMobile.classList.remove('active');
+            displayCompletedButtonMobile.classList.add('active');
+            displayAllButton.classList.remove('active');
+            displayActiveButton.classList.remove('active');
+            displayCompletedButton.classList.add('active');
+            displayByConditionMobile(allTask)
+            break
     }
 }
 
@@ -232,6 +331,12 @@ function selectAction(el) {
                     i--;
                 }
             }
+            for (let i = 0; i < oldTask.length; i++) {
+                if (oldTask[i].isCheck) {
+                    oldTask.splice(i, 1);
+                    i--;
+                }
+            }
             displayByCondition(allTask);
             break;
 
@@ -249,6 +354,7 @@ function selectAction(el) {
             displayByCondition(allTask);
             break;
     }
+    setTimeout(() => el.selectedIndex = 0, 0)
 }
 
 function sortArr() {
@@ -284,23 +390,23 @@ function getSortedValueMobile() {
 function selectSort(device) {
     switch (device.value) {
         case 'A-Z':
-            let sorted = sortArr().sort((a, b) => (a.value < b.value) ? 1 : ((b.value < a.value) ? -1 : 0));
-            displayByCondition(sorted);
+            allTask.sort((a, b) => (a.value < b.value) ? 1 : ((b.value < a.value) ? -1 : 0));
+            displayByCondition(allTask);
             break;
 
         case 'Z-A':
-            let sorted1 = sortArr().sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
-            displayByCondition(sorted1);
+            allTask.sort((a, b) => (a.value > b.value) ? 1 : ((b.value > a.value) ? -1 : 0));
+            displayByCondition(allTask);
             break;
 
         case 'Newest':
+            allTask = [...oldTask];
             displayByCondition(allTask);
             break;
 
         case 'Oldest':
-            let dupliArr = [...allTask]
-            displayByCondition(dupliArr.reverse())
+            displayByCondition(allTask.reverse())
             break;
     }
+    setTimeout(() => device.selectedIndex = 0, 0)
 }
-

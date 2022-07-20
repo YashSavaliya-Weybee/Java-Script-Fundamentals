@@ -78,6 +78,24 @@ main {
   cursor: pointer;
 }
 
+.editInput {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 20px;
+  padding: 4px;
+}
+.editInput:focus {
+  box-shadow: 0 5px 10px hsla(0deg, 33%, 98%, 0.44);
+  outline: none;
+}
+
+.actv {
+  background: white;
+  color: black;
+  border-radius: 5px;
+}
+
 strong {
   color: white;
   font-size: 18px;
@@ -348,6 +366,9 @@ strong {
   .list-area li span {
     width: 73%;
     margin: 0px 5px;
+  }
+  .list-area li span .editInput {
+    width: 100%;
   }
   .list-area li a {
     font-size: medium;
